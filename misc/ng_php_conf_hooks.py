@@ -78,23 +78,26 @@ for root, dirs, files in os.walk(Parent_Dir):
 
 #replace(Parent_Dir+"/misc/templates/bash_profile.tpl",Bash_File+'/app-root/data/.bash_profile')
 
-f = open(repoDir + '/misc/templates/httpd.conf.tpl', 'r')
-conf = f.read().replace('{{OPENSHIFT_INTERNAL_IP}}', internalIp).replace('9000','25641').replace('{{OPENSHIFT_REPO_DIR}}', repoDir).replace('{{OPENSHIFT_RUNTIME_DIR}}', runtimeDir)
-f.close()
 
-f = open(runtimeDir + '/srv/php/etc/php-fpm.conf', 'w')
-f.write(conf)
-f.close()
+try:
+	f = open(Destination + '/misc/templates/httpd.conf.tpl', 'r')
+	conf = f.read().replace('{{OPENSHIFT_INTERNAL_IP}}', internalIp).replace('9000','25641').replace('{{OPENSHIFT_REPO_DIR}}', repoDir).replace('{{OPENSHIFT_RUNTIME_DIR}}', runtimeDir)
+	f.close()
 
-f = open(repoDir + '/misc/templates/php.ini.tpl', 'r')
-conf = f.read().replace('{{OPENSHIFT_INTERNAL_IP}}', internalIp).replace('8081',internalPort).replace('{{OPENSHIFT_REPO_DIR}}', repoDir).replace('{{OPENSHIFT_RUNTIME_DIR}}', runtimeDir)
-f.close()
+	f = open(runtimeDir + '/srv/php/etc/php-fpm.conf', 'w')
+	f.write(conf)
+	f.close()
+except:pass
+try:
+	f = open(Destination + '/misc/templates/php.ini.tpl', 'r')
+	conf = f.read().replace('{{OPENSHIFT_INTERNAL_IP}}', internalIp).replace('8081',internalPort).replace('{{OPENSHIFT_REPO_DIR}}', repoDir).replace('{{OPENSHIFT_RUNTIME_DIR}}', runtimeDir)
+	f.close()
 
-f = open(runtimeDir + '/srv/php/etc/apache2/php.ini', 'w')
-f.write(conf)
-f.close()
-
-f = open(repoDir + '/misc/templates/nginx.conf.tpl', 'r')
+	f = open(runtimeDir + '/srv/php/etc/apache2/php.ini', 'w')
+	f.write(conf)
+	f.close()
+except:pass
+f = open(Destination + '/misc/templates/nginx.conf.tpl', 'r')
 conf = f.read().replace('{{OPENSHIFT_INTERNAL_IP}}', internalIp).replace('{{OPENSHIFT_INTERNAL_PORT}}',internalPort)
 conf=conf.replace('{{OPENSHIFT_HOMEDIR}}',OPENSHIFT_HOMEDIR).replace('{{OPENSHIFT_REPO_DIR}}', repoDir)
 conf=conf.replace('{{OPENSHIFT_RUNTIME_DIR}}', runtimeDir)
