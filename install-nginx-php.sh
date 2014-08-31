@@ -27,25 +27,25 @@ if [ ! -d ${OPENSHIFT_HOMEDIR}/app-root/runtime/srv/nginx/sbin ]; then
 	mkdir ${OPENSHIFT_HOMEDIR}/app-root/runtime/srv/nginx
 	cd nginx-${NGINX_VERSION}	
 	nohup sh -c "./configure\
-	   --prefix={OPENSHIFT_HOMEDIR}/app-root/runtime/srv/nginx\
+	   --prefix=${OPENSHIFT_HOMEDIR}/app-root/runtime/srv/nginx\
 	   --with-pcre=$OPENSHIFT_TMP_DIR/pcre-${PCRE_VERSION}\
 	   --with-zlib=$OPENSHIFT_TMP_DIR/zlib-${ZLIB_VERSION}\
-		--with-http_ssl_module\
-		--with-http_realip_module \
-		--with-http_addition_module \
-		--with-http_sub_module\
-		--with-http_dav_module \
-		--with-http_flv_module \
-		--with-http_mp4_module \
-		--with-http_gunzip_module\
-		--with-http_gzip_static_module \
-		--with-http_random_index_module \
-		--with-http_secure_link_module\
-		--with-http_stub_status_module \
-		--with-mail \
-		--with-mail_ssl_module \
-		--with-file-aio\
-		--with-ipv6	    " > $OPENSHIFT_LOG_DIR/Nginx_config.log 2>&1 & 
+	   --with-http_ssl_module\
+	   --with-http_realip_module \
+	   --with-http_addition_module \
+	   --with-http_sub_module\
+	   --with-http_dav_module \
+	   --with-http_flv_module \
+	   --with-http_mp4_module \
+	   --with-http_gunzip_module\
+	   --with-http_gzip_static_module \
+	   --with-http_random_index_module \
+	   --with-http_secure_link_module\
+	   --with-http_stub_status_module \
+	   --with-mail \
+	   --with-mail_ssl_module \
+	   --with-file-aio\
+	   --with-ipv6	    " > $OPENSHIFT_LOG_DIR/Nginx_config.log 2>&1 & 
 	tail -f $OPENSHIFT_DIY_LOG_DIR/Nginx_config.log
 	
 	nohup sh -c "make && make install && make clean"  > $OPENSHIFT_LOG_DIR/nginx_install.log 2>&1 &  
@@ -91,3 +91,6 @@ nohup ${OPENSHIFT_HOMEDIR}/app-root/runtime/srv/php-${PHP_VERSION}/sbin/php-fpm 
 #---stoping nginx ----
 nohup killall nginx > $OPENSHIFT_LOG_DIR/nginx_stop.log 2>&1 &
 nohup killall php-fpm > $OPENSHIFT_LOG_DIR/php-fpm_stop.log 2>&1 &
+
+#nohup sh -c  "./install-nginx-php.sh" > $OPENSHIFT_LOG_DIR/main_install.log 2>&1 &
+#tail -f $OPENSHIFT_LOG_DIR/main_install.log
