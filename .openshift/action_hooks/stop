@@ -1,0 +1,31 @@
+#!/bin/bash
+# The logic to stop your application should be put in this script.
+
+source $OPENSHIFT_CARTRIDGE_SDK_BASH
+# Stop apache
+$OPENSHIFT_RUNTIME_DIR/srv/httpd/bin/apachectl stop > /dev/null 2>&1
+
+# Stop tornado
+# The logic to stop your application should be put in this script.
+kill `ps -ef | grep views | grep -v grep | awk '{ print $2 }'` > /dev/null 2>&1
+kill `ps -ef | grep nginx | grep -v grep | awk '{ print $2 }'` > /dev/null 2>&1
+
+${OPENSHIFT_HOMEDIR}/app-root/runtime/srv/nginx/sbin/nginx
+
+echo "Stopping nginx."
+if [ -f ${OPENSHIFT_HOMEDIR}/app-root/runtime/srv/nginx/logs/nginx.pid ];then
+	kill -QUIT `cat ${OPENSHIFT_HOMEDIR}/app-root/runtime/srv/nginx/logs/nginx.pid`
+else
+
+	kill -9 `lsof -t -i :8080`
+	kill -9 `lsof -t -i`
+fi
+echo "Stopping PHP-fpm."
+if [ -d ${OPENSHIFT_HOMEDIR}/app-root/runtime/srv/python/bin ];then
+	kill -QUIT `cat ${OPENSHIFT_RUN_DIR}/php-fpm.pid`
+	kill -9 `lsof -t -i :25641`
+fi
+# Always succeed, otherwise OpenShift declines to run build and start
+# hooks.
+exit 0
+exit 0
